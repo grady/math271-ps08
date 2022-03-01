@@ -118,6 +118,11 @@ plotly::plot_ly(openintro::evals, x=~bty_avg, y=~age, z=~score) %>%
 
 8. (Advanced) Use plotly to create a 3D plot of the regression surface.
 
+9. Consider the model formula `total ~ age + sitting + sex`. What columns are in the model matrix? Describe the prediction equation for this model.
+
+10. (Advanced) Try out the models `total ~ age * sitting + sex` and `total~age * sitting * sex` and describe the model matrices and prediction equations for these models.
+
+
 ## Plotly
 
 The [`plotly` library](https://plotly.com/r/) is a library which produces ineractive graphics for html output formats. The `ggplotly` command in particular will attempt to convert a ggplot object into a plotly graphic, and is a simple way to start using the library. It can also be used directly, with the `plot_ly` command.
