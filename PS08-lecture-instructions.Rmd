@@ -1,0 +1,93 @@
+---
+title: "Multiple Regression"
+author: "Math 271"
+date: "Spring 2022"
+output: 
+  html_document:
+    css: lab.css
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    code_folding: show
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(magrittr)
+library(plotly)
+
+predeqn <- function(model, fmt="%+0.3f"){
+  cv <- coef(model)
+  cn <- names(cv) %>% str_replace("\\(Intercept\\)", "1")
+  cv <- cv %>% sprintf(fmt=fmt)
+  paste(cv, "\\cdot \\text{", cn, "}", collapse = " ")
+}
+```
+
+
+
+## One Numerical and One Categorical Predictor
+
+Consider again the `openintro::evals` data set. We will attempt to model the `score` using both `age` and `gender`.
+
+```{r score1}
+(score1 <- lm(score ~ age + gender, openintro::evals))
+```
+
+From our work last week, we should be able to recognize that the prediction equation for this model will be
+\[\widehat{\text{score}} = `r predeqn(score1)`\]
+
+The `gendermale` is a dummy variable which is `1` for males, and `0` for females. 
+
+```{r score1_plot}
+evalsplot <- ggplot(openintro::evals) + aes(x=age, y=score, color=gender) + 
+  geom_jitter(width=0.5, height=0, alpha=0.5)
+ggplotly(evalsplot + geom_line(aes(y=predict(score1))))
+```
+The ultimate effect of this prediction equation is to produce one regression line for each gender. The predictions for the male group have the coefficient for `gendermale` added, which causes the intercept to change. This is a vertical shift of the regression line.
+
+### Adding an interaction
+
+```{r score2}
+(score2 <- lm(score ~ age * gender, openintro::evals))
+```
+When adding an interaction term (the `*` means add both terms and their interaction), the prediction equation becomes
+\[\widehat{\text{score}} = `r predeqn(score2)`\]
+
+Recall that an interaction variable is nothing more than a new variable formed by the product of two others. Since `gendermale` is an indicator variable, the interaction `age:gendermale` has all zeros for females, while males have simply their `age`. By considering the two group equations separately and simplifying, we see that the net effect of this is that now the prediction lines can have different slopes for the two groups.
+
+```{r score2_plot}
+ggplotly(evalsplot + geom_line(aes(y=predict(score2))))
+```
+
+## Two Numerical Predictors
+
+
+```{r score3}
+(score3 <- lm(score ~ bty_avg + age, openintro::evals))
+```
+
+```{r score3_plot}
+seq_grid <- function(x, n=10){seq(min(x), max(x), length.out=n)}
+newx <- openintro::evals %>% summarize(across(bty_avg|age, seq_grid))
+predmat <- newx %>% do.call(expand_grid, .) %>% predict(score3, .) %>% matrix(nrow=nrow(newx))
+
+plotly::plot_ly(openintro::evals, x=~bty_avg, y=~age, z=~score) %>% 
+  add_markers(size=1) %>% 
+  add_surface(x=~bty_avg, y=~age, z=predmat, data=newx)
+```
+
+```{r score4}
+(score4 <- lm(score ~ bty_avg * age, openintro::evals))
+```
+
+```{r score4_plot}
+predmat4 <- newx %>% do.call(expand_grid, .) %>% predict(score4, .) %>% matrix(nrow=nrow(newx))
+
+plotly::plot_ly(openintro::evals, x=~bty_avg, y=~age, z=~score) %>% 
+  add_markers(size=1) %>% 
+  add_surface(x=~bty_avg, y=~age, z=predmat4, data=newx)
+```
+
