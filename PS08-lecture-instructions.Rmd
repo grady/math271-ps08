@@ -58,12 +58,29 @@ When adding an interaction term (the `*` means add both terms and their interact
 
 Recall that an interaction variable is nothing more than a new variable formed by the product of two others. Since `gendermale` is an indicator variable, the interaction `age:gendermale` has all zeros for females, while males have simply their `age`. By considering the two group equations separately and simplifying, we see that the net effect of this is that now the prediction lines can have different slopes for the two groups.
 
+\[\widehat{\text{score}} = 
+\begin{cases}
+4.88 - 0.018 \cdot \text{age}&\text{ if gender is female}\\
+(4.88 - 0.45) + (-0.018 + 0.014)\cdot\text{age}&\text{ if gender is male}
+\end{cases}\]
+
 ```{r score2_plot}
 ggplotly(evalsplot + geom_line(aes(y=predict(score2))))
 ```
 
+1. Use the code `vole_trapping <- read_csv("http://bit.ly/2IgDF0E")` to import a new data set. Make an initial scatterplot of the `vole_trapping` data, using `veg` as the x-axis, `voles` as the y-axis, and `soil` as the color.
+
+2. Fit a main-effects only model to the vole data. Generate predictions and add the prediction lines to the scatterplot. The lines should be parallel.
+
+3. Fit a model with interaction between the predictors. Generate predictions and add the prediction lines to a new scatterplot.
+
+4. Using LaTeX, typeset the prediction equations for both of the above models.
+
+(Data from ModernDive [Lab 06](https://moderndive.github.io/moderndive_labs/static/PS/PS06_multiple_reg.html) on multiple regression.)
+
 ## Two Numerical Predictors
 
+The most "natural" way to visualize a regression model using two numeric predictor variables is as a _regression surface_. The predictor variables are placed on the horizontal axes, and the vertical axis holds the value of the prediction. For a main effects only model, the surface will be a flat plane.
 
 ```{r score3}
 (score3 <- lm(score ~ bty_avg + age, openintro::evals))
@@ -79,6 +96,8 @@ plotly::plot_ly(openintro::evals, x=~bty_avg, y=~age, z=~score) %>%
   add_surface(x=~bty_avg, y=~age, z=predmat, data=newx)
 ```
 
+Models with interactions have surfaces that can bend into paraboloids or hyperboloids.
+
 ```{r score4}
 (score4 <- lm(score ~ bty_avg * age, openintro::evals))
 ```
@@ -91,3 +110,14 @@ plotly::plot_ly(openintro::evals, x=~bty_avg, y=~age, z=~score) %>%
   add_surface(x=~bty_avg, y=~age, z=predmat4, data=newx)
 ```
 
+5. Consider the `openintro::mtl` data set. The variable of interest is `total` which measures the thickness of the medial temoral lobe (MTL), along with other information about an individual. In particular, we shall focus on the `age` and `sitting` variables as predictors. Fit a main-effects only model, and typeset the resulting prediction equation using LaTeX.
+
+6. (Advanced) Use plotly to create a 3D plot of the regression surface.
+
+7. Fit a model including an interaction term. Typeset and explain the resulting prediction equation. In particular, explain how the interaction term contributes to the prediction.
+
+8. (Advanced) Use plotly to create a 3D plot of the regression surface.
+
+## Plotly
+
+The [`plotly` library](https://plotly.com/r/) is a library which produces ineractive graphics for html output formats. The `ggplotly` command in particular will attempt to convert a ggplot object into a plotly graphic, and is a simple way to start using the library. It can also be used directly, with the `plot_ly` command.
