@@ -1,2 +1,4 @@
 ## packages required (one per line)
 tidyverse
+openintro
+plotly
