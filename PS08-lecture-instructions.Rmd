@@ -68,11 +68,11 @@ Recall that an interaction variable is nothing more than a new variable formed b
 ggplotly(evalsplot + geom_line(aes(y=predict(score2))))
 ```
 
-1. Use the code `vole_trapping <- read_csv("http://bit.ly/2IgDF0E")` to import a new data set. Make an initial scatterplot of the `vole_trapping` data, using `veg` as the x-axis, `voles` as the y-axis, and `soil` as the color.
+1. Use the code `vole_trapping <- readr::read_csv("http://bit.ly/2IgDF0E")` to import a new data set. Make an initial scatterplot of the `vole_trapping` data, using `veg` as the x-axis, `voles` as the y-axis, and `soil` as the color.
 
-2. Fit a main-effects only model to the vole data. Generate predictions and add the prediction lines to the scatterplot. The lines should be parallel.
+2. Fit a main-effects only model to the vole data and store it as variable `vole_main`. Generate predictions and add the prediction lines to the scatterplot. The lines should be parallel.
 
-3. Fit a model with interaction between the predictors. Generate predictions and add the prediction lines to a new scatterplot.
+3. Fit a model with interaction between the predictors and store it as `vole_inter`. Generate predictions and add the prediction lines to a new scatterplot.
 
 4. Using LaTeX, typeset the prediction equations for both of the above models.
 
@@ -110,7 +110,7 @@ plotly::plot_ly(openintro::evals, x=~bty_avg, y=~age, z=~score) %>%
   add_surface(x=~bty_avg, y=~age, z=predmat4, data=newx)
 ```
 
-5. Consider the `openintro::mtl` data set. The variable of interest is `total` which measures the thickness of the medial temoral lobe (MTL), along with other information about an individual. In particular, we shall focus on the `age` and `sitting` variables as predictors. Fit a main-effects only model, and typeset the resulting prediction equation using LaTeX.
+5. Consider the `openintro::mtl` data set. The variable of interest is `total` which measures the thickness of the medial temoral lobe (MTL), along with other information about an individual. In particular, we shall focus on the `age` and `sitting` variables as predictors. Fit a main-effects only model and save it as `mlt_main`. Typeset the resulting prediction equation using LaTeX.
 
 6. (Advanced) Use plotly to create a 3D plot of the regression surface.
 
